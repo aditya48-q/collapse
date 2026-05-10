@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Weather Bridge Collapse</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div id="scene">
+            
+            <div id="sky-sunrise"></div>
+            <div id="sky-sunset"></div>
+
+            <div id="sun-container">
+                <div class="sun-state sun-day"></div>
+                <div class="sun-state sun-eve"></div>
+            </div>
+
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="cloud c3"></div>
+
+            <svg id="mountains" viewBox="0 0 900 300" preserveAspectRatio="none">
+                <polygon points="-50,300 150,150 400,300" class="mount-b" />
+                <polygon points="300,300 550,120 800,300" class="mount-b" />
+                <polygon points="650,300 850,160 1000,300" class="mount-b" />
+                <polygon points="-100,300 100,200 350,300" class="mount-f" />
+                <polygon points="200,300 450,180 700,300" class="mount-f" />
+                <polygon points="550,300 750,190 950,300" class="mount-f" />
+            </svg>
+
+            <svg id="cables-svg">
+                <line x1="270" y1="120" x2="140" y2="265" class="cable" />
+                <line x1="270" y1="120" x2="190" y2="265" class="cable" />
+                <line x1="270" y1="120" x2="230" y2="265" class="cable" />
+                <line x1="270" y1="120" x2="310" y2="265" class="cable mid-cable" />
+                <line x1="270" y1="120" x2="350" y2="265" class="cable mid-cable" />
+                <line x1="270" y1="120" x2="400" y2="265" class="cable mid-cable" />
+                <line x1="630" y1="120" x2="500" y2="265" class="cable mid-cable" />
+                <line x1="630" y1="120" x2="550" y2="265" class="cable mid-cable" />
+                <line x1="630" y1="120" x2="590" y2="265" class="cable mid-cable" />
+                <line x1="630" y1="120" x2="670" y2="265" class="cable" />
+                <line x1="630" y1="120" x2="710" y2="265" class="cable" />
+                <line x1="630" y1="120" x2="760" y2="265" class="cable" />
+            </svg>
+
+            <div id="tower-left" class="tower-container">
+                <div class="tower-top"></div><div class="tower-spire"></div>
+                <div class="tower-cross-top"></div><div class="tower-mid"></div>
+                <div class="tower-cross-bottom"></div><div class="tower-base"></div>
+            </div>
+            <div id="tower-right" class="tower-container">
+                <div class="tower-top"></div><div class="tower-spire"></div>
+                <div class="tower-cross-top"></div><div class="tower-mid"></div>
+                <div class="tower-cross-bottom"></div><div class="tower-base"></div>
+            </div>
+
+            <div id="deck-left" class="deck"></div>
+            <div id="deck-right" class="deck"></div>
+            <div id="deck-mid" class="deck">
+                <svg id="cracks" preserveAspectRatio="none" viewBox="0 0 380 30">
+                    <path d="M 5 0 L 15 15 L 10 25 L 20 18" fill="none" stroke="#111" stroke-width="2.5"/>
+                    <path d="M 360 0 L 365 15 L 350 20 L 370 25 L 375 18" fill="none" stroke="#111" stroke-width="2.5"/>
+                    <path d="M 370 -5 L 360 10 L 375 20 L 365 30" fill="none" stroke="#111" stroke-width="2"/>
+                </svg>
+            </div>
+
+            <div id="deb1" class="debris"></div>
+            <div id="deb2" class="debris"></div>
+            <div id="deb3" class="debris"></div>
+
+            <div id="car1" class="car-wrapper">
+                <div class="car red"><div class="window"></div><div class="window right"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+            </div>
+            <div id="car2" class="car-wrapper" style="left: -100px;">
+                <div class="car green"><div class="window"></div><div class="window right"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+            </div>
+            <div id="car3" class="car-wrapper" style="left: -100px;">
+                <div class="car blue"><div class="window"></div><div class="window right"></div><div class="wheel left"></div><div class="wheel right"></div></div>
+            </div>
+
+            <div id="water">
+                <svg class="water-waves" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                    <defs>
+                        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                    </defs>
+                    <g class="parallax">
+                        <use href="#gentle-wave" x="48" y="0" class="w1"/>
+                        <use href="#gentle-wave" x="48" y="3" class="w2"/>
+                        <use href="#gentle-wave" x="48" y="5" class="w3"/>
+                        <use href="#gentle-wave" x="48" y="7" class="w4"/>
+                    </g>
+                </svg>
+                
+                <div id="splash-main" class="splash"></div>
+                <div id="splash-car2" class="splash car-splash"></div>
+                <div id="splash-car3" class="splash car-splash"></div>
+            </div>
+        </div>
+
+        <div id="controls">
+            <div class="mode-toggles">
+                <button id="btn-sunrise" class="toggle-btn active">☀️ Sunrise</button>
+                <button id="btn-sunset" class="toggle-btn">🌙 Sunset</button>
+            </div>
+            <button id="start-btn">▶ INITIATE COLLAPSE</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

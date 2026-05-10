@@ -1,0 +1,283 @@
+/* CSS Variables for Dynamic Weather/Time Themes */
+:root {
+    /* SUNRISE (SUMMER DAY) DEFAULTS */
+    --sun-y: 220px;
+    --cloud-opacity: 0.9;
+    --cloud-color: 255, 255, 255;
+    
+    /* Mountains */
+    --mount-b1: #A5D6A7;
+    --mount-f1: #81C784;
+    
+    /* Water */
+    --water-w1: rgba(255, 255, 255, 0.4);
+    --water-w2: rgba(179, 229, 252, 0.6);
+    --water-w3: rgba(79, 195, 247, 0.8);
+    --water-base: #039BE5;
+
+    /* Bridge Materials (Lighter for day) */
+    --tower-light: #C0B8AC;
+    --tower-dark: #A59B8B;
+    --deck-top: #959390;
+    --deck-side: #757370;
+}
+
+#scene.sunset-mode {
+    /* SUNSET DEFAULTS */
+    --sun-y: 60px; /* Sun moves down */
+    --cloud-opacity: 0.25;
+    --cloud-color: 255, 200, 200;
+    
+    /* Mountains (Silhouettes) */
+    --mount-b1: #2c1e3a;
+    --mount-f1: #1a1124;
+    
+    /* Water (Reflecting sunset) */
+    --water-w1: rgba(255, 128, 8, 0.3);
+    --water-w2: rgba(139, 43, 61, 0.5);
+    --water-w3: rgba(48, 43, 99, 0.7);
+    --water-base: #0f172a;
+
+    /* Bridge Materials (Darker/Shadowed) */
+    --tower-light: #7a7369;
+    --tower-dark: #4a453e;
+    --deck-top: #7a7874;
+    --deck-side: #4a4947;
+}
+
+/* Base Scene Setup */
+body {
+    margin: 0; display: flex; justify-content: center;
+    align-items: center; height: 100vh;
+    background-color: #121212;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container { position: relative; }
+
+#scene {
+    position: relative; width: 900px; height: 550px;
+    overflow: hidden; border-radius: 12px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.6), inset 0 0 40px rgba(0,0,0,0.2);
+}
+
+/* --- Dynamic Sky Backgrounds --- */
+#sky-sunrise, #sky-sunset {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%; z-index: 0;
+    transition: opacity 2s ease-in-out;
+}
+/* Summer bright sky */
+#sky-sunrise {
+    background: linear-gradient(to bottom, #2193b0 0%, #6dd5ed 100%);
+    opacity: 1;
+}
+/* Sunset dramatic sky */
+#sky-sunset {
+    background: linear-gradient(to bottom, #102131 0%, #302b63 45%, #8b2b3d 75%, #ff8008 100%);
+    opacity: 0;
+}
+#scene.sunset-mode #sky-sunrise { opacity: 0; }
+#scene.sunset-mode #sky-sunset { opacity: 1; }
+
+/* --- The Sun --- */
+#sun-container {
+    position: absolute; bottom: var(--sun-y); left: 50%;
+    transform: translateX(-50%); width: 120px; height: 120px;
+    z-index: 1; transition: bottom 2.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sun-state {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%; transition: opacity 2s ease-in-out;
+}
+.sun-day {
+    background: radial-gradient(circle, #ffffff 0%, #fff59d 70%, transparent 100%);
+    box-shadow: 0 0 40px 10px rgba(255, 235, 59, 0.4);
+    opacity: 1;
+}
+.sun-eve {
+    background: radial-gradient(circle, #ffd000 0%, #ff7b00 70%, transparent 100%);
+    box-shadow: 0 0 80px 20px rgba(255, 123, 0, 0.6);
+    opacity: 0;
+}
+#scene.sunset-mode .sun-day { opacity: 0; }
+#scene.sunset-mode .sun-eve { opacity: 1; }
+
+/* --- Clouds --- */
+.cloud {
+    position: absolute;
+    background: rgba(var(--cloud-color), var(--cloud-opacity));
+    border-radius: 50px; filter: blur(4px); z-index: 1;
+    animation: drift linear infinite;
+    transition: background 2s ease, opacity 2s ease;
+}
+.cloud::before, .cloud::after {
+    content: ''; position: absolute;
+    background: rgba(var(--cloud-color), var(--cloud-opacity));
+    border-radius: 50%;
+    transition: background 2s ease, opacity 2s ease;
+}
+.c1 { width: 180px; height: 50px; top: 60px; left: -200px; animation-duration: 45s; }
+.c1::before { width: 70px; height: 70px; top: -35px; left: 30px; }
+.c1::after { width: 90px; height: 90px; top: -45px; left: 70px; }
+
+.c2 { width: 140px; height: 40px; top: 130px; left: -200px; animation-duration: 35s; animation-delay: 5s; transform: scale(0.8); }
+.c2::before { width: 50px; height: 50px; top: -25px; left: 20px; }
+.c2::after { width: 70px; height: 70px; top: -35px; left: 50px; }
+
+.c3 { width: 220px; height: 60px; top: 40px; left: -250px; animation-duration: 60s; animation-delay: 15s; }
+.c3::before { width: 80px; height: 80px; top: -40px; left: 40px; }
+.c3::after { width: 110px; height: 110px; top: -55px; left: 80px; }
+
+@keyframes drift { 0% { transform: translateX(0); } 100% { transform: translateX(1200px); } }
+
+/* --- Scenery Elements --- */
+#mountains {
+    position: absolute; bottom: 120px; width: 100%; height: 250px;
+    z-index: 2; pointer-events: none;
+    filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.2));
+}
+.mount-b { fill: var(--mount-b1); transition: fill 2s ease; }
+.mount-f { fill: var(--mount-f1); transition: fill 2s ease; }
+
+/* --- Water Section --- */
+#water {
+    position: absolute; bottom: 0; width: 100%; height: 140px;
+    background: var(--water-base); z-index: 6;
+    transition: background 2s ease;
+}
+.water-waves { position: absolute; top: -35px; width: 100%; height: 40px; }
+.parallax > use { animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite; transition: fill 2s ease; }
+.w1 { animation-delay: -2s; animation-duration: 7s; fill: var(--water-w1); }
+.w2 { animation-delay: -3s; animation-duration: 10s; fill: var(--water-w2); }
+.w3 { animation-delay: -4s; animation-duration: 13s; fill: var(--water-w3); }
+.w4 { animation-delay: -5s; animation-duration: 20s; fill: var(--water-base); }
+
+@keyframes move-forever { 0% { transform: translate3d(-90px, 0, 0); } 100% { transform: translate3d(85px, 0, 0); } }
+
+/* Splash Effects */
+.splash {
+    position: absolute; top: 20px; background: rgba(255, 255, 255, 0.85);
+    border-radius: 50%; transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0; filter: blur(5px); pointer-events: none;
+    box-shadow: 0 0 20px rgba(255,255,255,0.6);
+}
+#splash-main { left: 450px; width: 350px; height: 100px; }
+.car-splash { width: 120px; height: 40px; background: rgba(255, 255, 255, 0.95); }
+#splash-car2 { left: 630px; } 
+#splash-car3 { left: 470px; }
+
+/* --- Towers --- */
+.tower-container {
+    position: absolute; bottom: 110px; width: 60px; height: 350px;
+    z-index: 3; display: flex; flex-direction: column; align-items: center;
+    filter: drop-shadow(5px 5px 10px rgba(0,0,0,0.5));
+}
+#tower-left { left: 240px; }
+#tower-right { right: 240px; }
+
+/* Bridge materials transition via variables */
+.tower-top { width: 24px; height: 15px; background: linear-gradient(to right, var(--tower-dark), var(--tower-light)); transition: background 2s ease; }
+.tower-spire { width: 10px; height: 50px; background: linear-gradient(to right, var(--tower-dark), var(--tower-light)); transition: background 2s ease; }
+.tower-cross-top { width: 36px; height: 12px; background: linear-gradient(to right, var(--tower-dark), var(--tower-light)); transition: background 2s ease; }
+.tower-mid { 
+    width: 22px; height: 100px; 
+    background: linear-gradient(to right, var(--tower-dark), var(--tower-light)); 
+    border-left: 4px solid var(--deck-side); 
+    border-right: 4px solid var(--deck-side); 
+    transition: background 2s ease, border-color 2s ease;
+}
+.tower-cross-bottom { width: 44px; height: 12px; background: linear-gradient(to right, var(--deck-side), var(--tower-dark)); transition: background 2s ease;}
+.tower-base { width: 26px; height: 161px; background: linear-gradient(to right, var(--deck-side), var(--tower-dark)); transition: background 2s ease;}
+
+/* Suspension Cables */
+#cables-svg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 4; pointer-events: none; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+}
+.cable { stroke: #d1c8b8; stroke-width: 2; opacity: 0.8; }
+
+/* --- Bridge Deck Structure --- */
+.deck {
+    position: absolute; bottom: 270px; height: 20px;
+    background: linear-gradient(to bottom, var(--deck-top), var(--deck-side));
+    z-index: 5; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    transition: background 2s ease;
+}
+.deck::after {
+    content: ''; position: absolute; top: 9px; left: 0; width: 100%; height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,0.8) 0, rgba(255,255,255,0.8) 15px, transparent 15px, transparent 30px);
+}
+
+#deck-left { left: 0; width: 260px; }
+#deck-right { right: 0; width: 260px; }
+#deck-mid { left: 260px; width: 380px; transform-origin: left bottom; }
+
+#cracks {
+    position: absolute; top: -5px; left: 0; width: 100%; height: 30px;
+    opacity: 0; pointer-events: none; z-index: 6;
+}
+
+/* Falling Debris Particles */
+.debris {
+    position: absolute; bottom: 270px; width: 14px; height: 14px;
+    background: #333; z-index: 5; opacity: 0; box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+#deb1 { left: 270px; width: 20px; background: #444; }
+#deb2 { left: 630px; background: #222; }
+#deb3 { left: 580px; height: 10px; background: #555;}
+
+/* --- Vehicles --- */
+.car-wrapper { position: absolute; bottom: 290px; left: -100px; z-index: 6; filter: drop-shadow(3px 3px 5px rgba(0,0,0,0.5));}
+.car { width: 50px; height: 20px; border-radius: 8px 12px 0 0; position: relative; }
+
+.car.red { background: linear-gradient(to bottom, #ff4757, #ff1e34); }
+.car.green { background: linear-gradient(to bottom, #2ed573, #1eab58); }
+.car.blue { background: linear-gradient(to bottom, #1e90ff, #0070d8); }
+
+.window { position: absolute; top: 4px; left: 8px; width: 12px; height: 8px; background: #f1f2f6; border-radius: 2px; }
+.window.right { left: 28px; }
+.wheel {
+    position: absolute; bottom: -6px; width: 12px; height: 12px; background: #111;
+    border-radius: 50%; border: 2px solid #a4b0be; box-shadow: inset 0 0 3px rgba(0,0,0,0.8);
+}
+.wheel.left { left: 6px; }
+.wheel.right { right: 6px; }
+
+/* --- Dynamic Animation Classes --- */
+.falling { transform: translateY(220px) rotate(12deg); transition: transform 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53); }
+.rewinding { transform: translateY(0) rotate(0); transition: transform 1.5s ease-in-out; }
+
+.car2-falling { transform: translate(600px, 210px) rotate(35deg) !important; transition: transform 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53) !important; }
+.car3-falling { transform: translate(450px, 200px) rotate(15deg) !important; transition: transform 0.55s cubic-bezier(0.55, 0.085, 0.68, 0.53) !important; }
+
+.falling-deb1 { transform: translateY(220px) translateX(-30px) rotate(-360deg); transition: transform 0.6s ease-in; opacity: 1 !important; }
+.falling-deb2 { transform: translateY(240px) translateX(40px) rotate(360deg); transition: transform 0.7s ease-in; opacity: 1 !important; }
+.falling-deb3 { transform: translateY(200px) translateX(20px) rotate(720deg); transition: transform 0.5s ease-in; opacity: 1 !important; }
+
+.splashing { transform: translate(-50%, -50%) scale(3.5) !important; opacity: 0 !important; transition: transform 0.6s ease-out, opacity 0.6s ease-out 0.2s !important; }
+.splashing-car { transform: translate(-50%, -50%) scale(2.2) !important; opacity: 0 !important; transition: transform 0.5s ease-out, opacity 0.5s ease-out 0.1s !important; }
+
+/* --- UI Controls --- */
+#controls {
+    position: absolute; bottom: -70px; display: flex; justify-content: space-between;
+    width: 100%; align-items: center; padding: 0 10px; box-sizing: border-box;
+}
+.mode-toggles { display: flex; gap: 10px; }
+button {
+    padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; border: none;
+    border-radius: 6px; transition: all 0.2s; letter-spacing: 0.5px;
+}
+/* Action Button */
+#start-btn {
+    background: linear-gradient(135deg, #ff4757, #ff1e34); color: white;
+    box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+}
+#start-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 71, 87, 0.6); }
+#start-btn:disabled { background: #555; box-shadow: none; cursor: not-allowed; color: #aaa; transform: none;}
+
+/* Toggle Buttons */
+.toggle-btn { background: #333; color: #aaa; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+.toggle-btn:hover { background: #444; }
+.toggle-btn.active { background: #f1c40f; color: #222; box-shadow: 0 0 15px rgba(241, 196, 15, 0.5); }
+#btn-sunset.active { background: #ff7b00; color: #fff; box-shadow: 0 0 15px rgba(255, 123, 0, 0.5); }
